@@ -10,7 +10,12 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*', // Update this to your Netlify site's URL for security
+    methods: ['GET', 'POST']
+  }
+});
 
 // Serve the public directory for client files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -52,7 +57,13 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 3000;
+// Handle SPA (Single Page Application) routing by serving index.html for all non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start the server on the specified port or default to 3000
+const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
