@@ -71,6 +71,26 @@ io.on('connection', (socket) => {
       });
     }
   });
+  
+
+  // Handle 'start_audio' events from clients
+  socket.on('start_audio', () => {
+    console.log(`User ${socket.id} started broadcasting audio.`);
+    socket.broadcast.emit('start_audio', socket.id);
+  });
+
+  // Handle 'stop_audio' events from clients
+  socket.on('stop_audio', () => {
+    console.log(`User ${socket.id} stopped broadcasting audio.`);
+    socket.broadcast.emit('stop_audio', socket.id);
+  });
+
+  // Handle 'audio_stream' events from clients
+  socket.on('audio_stream', (data) => {
+    // Broadcast the audio data to all other clients, tagging with the sender's ID
+    socket.broadcast.emit('audio_stream', { id: socket.id, audio: data });
+  });
+
 
   // Handle 'key_down' events from clients
   socket.on('key_down', (data) => {
