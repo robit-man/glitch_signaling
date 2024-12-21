@@ -24,6 +24,17 @@
 </head>
 <body>
   <div id="info">WASD to Move. Open in multiple browsers to see each other.</div>
+   <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/controls/OrbitControls.js';
+    import { XRControllerModelFactory } from 'https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/webxr/XRControllerModelFactory.js';
+    import { XRHandModelFactory } from 'https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/webxr/XRHandModelFactory.js';
+    import { VRButton } from 'https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/webxr/VRButton.js';
+    import SimplexNoise from 'https://cdn.jsdelivr.net/npm/simplex-noise@3.0.0/dist/esm/simplex-noise.min.js';
+    import { io } from 'https://cdn.socket.io/4.4.1/socket.io.esm.min.js';
+
+    // Your client.js logic goes here
+  </script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="client.js"></script>
 </body>
