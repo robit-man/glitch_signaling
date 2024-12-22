@@ -29,25 +29,29 @@ function getRandomColor() {
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  // Add the new player to the players object
-  players[socket.id] = {
-    x: 0,          // Initial X position
-    z: 0,          // Initial Z position
-    rotation: 0,   // Initial rotation
-    color: getRandomColor() // Assign a random color
-  };
+    socket.on('player_joined', (data) => {
+        console.log(`Player joined: ${socket.id}`, data);
 
-  // Send 'init' event to the newly connected client with current players
-  socket.emit('init', { id: socket.id, players });
+        // Use the data sent by the client to initialize the player
+        players[socket.id] = {
+            x: data.x,
+            z: data.z,
+            rotation: data.rotation,
+            color: getRandomColor(), // Assign a random color
+        };
 
-  // Notify existing clients about the new player
-  socket.broadcast.emit('new_player', {
-    id: socket.id,
-    x: players[socket.id].x,
-    z: players[socket.id].z,
-    rotation: players[socket.id].rotation,
-    color: players[socket.id].color
-  });
+        // Send initial state to the new client
+        socket.emit('init', { id: socket.id, players });
+
+        // Notify other clients about the new player
+        socket.broadcast.emit('new_player', {
+            id: socket.id,
+            x: players[socket.id].x,
+            z: players[socket.id].z,
+            rotation: players[socket.id].rotation,
+            color: players[socket.id].color,
+        });
+    });
 
   // Handle 'move' events from clients
   socket.on('move', (data) => {
